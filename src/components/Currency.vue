@@ -1,16 +1,17 @@
 <template>
     <div class="segundoComponente">
-        <span>Currency</span>
-        <select>
-            <option>Dollars($)</option>
-            <option>Euros(€)</option>
-        </select>
+      <span>Currency</span>
+      <select v-model="selectedCurrency">
+        <option value="usd">Dollars($)</option>
+        <option value="eur">Euros(€)</option>
+      </select>
     </div>
-</template>
+  </template>
+  
+  <script setup>
 
-<script setup lang="ts">
-
-</script>
+  </script>
+  
 
 <style scoped>
 .segundoComponente{

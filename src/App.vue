@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import Currency from "@/components/Currency.vue";
 import Comanda from "@/components/Comanda.vue"
 import { ref } from "vue";
@@ -22,12 +22,17 @@ const comidas = [
   </div>
   <Currency></Currency>
 
-  <Comanda v-for="comida in comidas" :key="comida.name" :comer="comida"></Comanda>
+  <ul>
+      <Comanda v-for="comida in comidas" :key="comida.name" :comida="comida"></Comanda>
+  </ul>
 </template>
 
 <style scoped>
 .principalComponente {
   text-align: center;
   margin-top: 250px;
+}
+ul{
+  text-align: center;
 }
 </style>
