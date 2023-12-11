@@ -1,31 +1,34 @@
-<script setup>
-import type ProductType from "@/types/Product";
-import type { Currency as CurrencyType } from "@/types/Currency";
-import CurrencyPriceComponent from "./CurrencyPrice.vue";
-
-const componentProps = defineProps<{
-  productInfo: ProductType;
+<script setup lang="ts">
+import type Product from "../types/Product.ts";
+defineProps<{
+  info: Product;
 }>();
 
-const componentEmits = defineEmits<{
-  addToCart: [productInfo: ProductType];
+defineEmits<{
+  "@añadirProducto": [info: Product];
 }>();
 </script>
 
 <template>
-  <article>
-    <p>{{ productInfo.name }}</p>
-    <CurrencyPriceComponent :originalPrice="productInfo.price" />
-    <button @click="onAddToCart" type="button">
-      Add to Cart
-    </button>
-  </article>
+  <div class="producte">
+    <span class="name">{{ info.name }}</span>
+    <span class="price">{{ info.price }}</span>
+    <button @click="$emit('@añadirProducto', info)" type="button">Add to Cart</button>
+  </div>
 </template>
 
 <style scoped>
-article {
+.producte {
   display: flex;
-  gap: 5px;
-  flex-wrap: wrap;
+  text-align: center;
+  margin: 10px;
+}
+
+.name {
+  margin-right: 10px;
+}
+
+.price {
+  margin-right: 10px;
 }
 </style>
