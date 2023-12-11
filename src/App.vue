@@ -1,38 +1,100 @@
-<script setup>
-import Currency from "@/components/Currency.vue";
-import Comanda from "@/components/Comanda.vue"
-import { ref } from "vue";
-
-const text = ref('')
-const comidas = [
-  { name: "Hamburger 🍔.", price: 5 },
-  { name: "Cheeseburger 🧀", price: 6 },
-  { name: "Impossible Burger 🥕", price: 7 },
-  { name: "Fries 🍟", price: 2 }
-
-]
-</script>
-
 <template>
-  <div class="principalComponente">
-    <h1>{{ text }}</h1>
-    <input v-model="text">
-    <!-- Aqui hacemos que el boton muestre un alert confome se ejecutado -->
-    <button onclick="alert('Your order has been placed!');">Place order</button>
+  <div class="main-container">
+    <h1>{{ orderTitle }}</h1>
+    <section>
+      <input v-model="orderTitle" type="text" />
+      <button @click="completeOrder" type="button">Complete Order</button>
+    </section>
   </div>
-  <Currency></Currency>
 
-  <ul>
-      <Comanda v-for="comida in comidas" :key="comida.name" :comida="comida"></Comanda>
-  </ul>
+  <CurrencyComponent></CurrencyComponent>
+
+  <header>
+    <h1>{{ itemName }}</h1>
+    <section>
+      <input v-model="itemName" type="text" />
+      <button @click="addToCart" type="button">Add to Cart</button>
+    </section>
+  </header>
+
+  <main>
+    <div>
+      <label for="selectedCurrency">Currency</label>
+      <select v-model="selectedCurrency" name="selectedCurrency" id="selectedCurrency">
+        <option value="€">EUR (€)</option>
+        <option value="£">GBP (£)</option>
+      </select>
+    </div>
+
+    <section class="products">
+      <OrderItem
+        v-for="(product, index) in foodItems"
+        :info="product"
+        :key="index"
+        @add-to-cart="addToCart"
+      />
+    </section>
+  </main>
 </template>
 
+<script setup>
+import { ref, provide } from "vue";
+import type { Currency } from "./types/Currency";
+import type Product from "./types/Product";
+import CurrencyComponent from "@/components/Currency.vue";
+import OrderItem from "./components/Comanda.vue";
+
+const orderTitle = ref("My Delicious Order");
+const selectedCurrency = ref("€");
+const foodItems = ref<Product[]>([
+  { name: "Yummy Burger 🍔.", price: 5 },
+  { name: "Cheesy Delight 🧀", price: 6 },
+  { name: "Impossible Delight 🥕", price: 7 },
+  { name: "Crispy Fries 🍟", price: 2 },
+]);
+const cart = ref<Product[]>([]);
+
+const addToCart = (product: Product): void => {
+  cart.value.push(product);
+  alert(`Added ${product.name} to the cart!`);
+};
+
+const completeOrder = (): void => {
+  cart.value = [];
+  alert(`Your order ${orderTitle.value} has been completed.`);
+};
+
+provide("selectedCurrency", selectedCurrency);
+</script>
+
 <style scoped>
-.principalComponente {
+.main-container {
   text-align: center;
   margin-top: 250px;
 }
-ul{
-  text-align: center;
+
+header,
+section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.products {
+  align-items: flex-start;
+}
+
+main {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+div {
+  display: flex;
+  gap: 5px;
 }
 </style>
